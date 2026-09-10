@@ -82,7 +82,7 @@ Material:
     - _WorldData: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.1254902, g: 0.5882353, b: 0.9529412, a: 1}
+    - _Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _lineRadius: {r: 1, g: 0, b: 100, a: 1}
     - _lineSettings: {r: 0, g: 1, b: 0.5, a: 1}
