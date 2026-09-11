@@ -39,17 +39,17 @@ namespace VRTraining.Presentation
                 return;
 
             var builder = new StringBuilder();
-            string currentGroup = null;
+            var currentGroupIndex = -1;
 
             foreach (var entry in scenarioController.GetResults())
             {
-                if (entry.GroupTitle != currentGroup)
+                if (entry.GroupIndex != currentGroupIndex)
                 {
-                    currentGroup = entry.GroupTitle;
+                    currentGroupIndex = entry.GroupIndex;
                     if (builder.Length > 0)
                         builder.AppendLine();
 
-                    builder.AppendLine(currentGroup);
+                    builder.AppendLine(entry.GroupTitle);
                 }
 
                 builder.Append(GetStatusMark(entry.Status));

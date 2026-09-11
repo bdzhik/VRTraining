@@ -28,7 +28,6 @@ namespace VRTraining.Core
 
         public int CurrentGroupIndex => currentGroupIndex;
         public int CurrentStepIndex => currentStepIndex;
-        public int CurrentActionIndex => currentActionIndex;
         public bool IsCompleted { get; private set; }
 
         public StepGroupDefinition CurrentGroup =>
@@ -40,7 +39,7 @@ namespace VRTraining.Core
         public ExpectedActionDefinition CurrentExpectedAction =>
             IsCompleted ? null : CurrentStep.ExpectedActions[currentActionIndex];
 
-        public void Reset()
+        private void Reset()
         {
             statuses = new StepStatus[definition.Groups.Count][];
 
@@ -94,7 +93,6 @@ namespace VRTraining.Core
                 {
                     results.Add(new ScenarioResultEntry(
                         groupIndex,
-                        stepIndex,
                         group.Title,
                         group.Steps[stepIndex].Description,
                         statuses[groupIndex][stepIndex]));
@@ -111,32 +109,28 @@ namespace VRTraining.Core
             if (currentActionIndex < CurrentStep.ExpectedActions.Count)
             {
                 return new ScenarioEvaluation(
-                    action, true, ScenarioFeedbackType.Correct, false, false, false);
+                    action, true, ScenarioFeedbackType.Correct, false);
             }
 
             statuses[currentGroupIndex][currentStepIndex] = StepStatus.Completed;
-            var groupCompleted = AdvanceAfterStep();
+            AdvanceAfterStep();
 
             return new ScenarioEvaluation(
                 action,
                 true,
                 ScenarioFeedbackType.Correct,
-                true,
-                groupCompleted,
                 IsCompleted);
         }
 
         private ScenarioEvaluation ProcessIncorrectAction(TrainingAction action)
         {
             statuses[currentGroupIndex][currentStepIndex] = StepStatus.CompletedWithError;
-            var groupCompleted = AdvanceAfterStep();
+            AdvanceAfterStep();
 
             return new ScenarioEvaluation(
                 action,
                 true,
                 ScenarioFeedbackType.Error,
-                true,
-                groupCompleted,
                 IsCompleted);
         }
 
@@ -160,8 +154,6 @@ namespace VRTraining.Core
                 action,
                 true,
                 ScenarioFeedbackType.SequenceViolation,
-                true,
-                true,
                 IsCompleted);
         }
 
@@ -182,16 +174,15 @@ namespace VRTraining.Core
             return -1;
         }
 
-        private bool AdvanceAfterStep()
+        private void AdvanceAfterStep()
         {
             currentStepIndex++;
             currentActionIndex = 0;
 
             if (currentStepIndex < CurrentGroup.Steps.Count)
-                return false;
+                return;
 
             AdvanceToNextGroup();
-            return true;
         }
 
         private void AdvanceToNextGroup()

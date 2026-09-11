@@ -25,7 +25,6 @@ namespace VRTraining.Scenario
         public bool IsCompleted => session != null && session.IsCompleted;
         public int CurrentGroupIndex => session?.CurrentGroupIndex ?? -1;
         public int CurrentStepIndex => session?.CurrentStepIndex ?? -1;
-        public int CurrentActionIndex => session?.CurrentActionIndex ?? -1;
         public StepGroupDefinition CurrentGroup => session?.CurrentGroup;
         public StepDefinition CurrentStep => session?.CurrentStep;
         public ExpectedActionDefinition CurrentExpectedAction => session?.CurrentExpectedAction;
@@ -85,15 +84,6 @@ namespace VRTraining.Scenario
         public IReadOnlyList<ScenarioResultEntry> GetResults()
         {
             return session?.GetResults() ?? Array.Empty<ScenarioResultEntry>();
-        }
-
-        public void RestartScenarioState()
-        {
-            if (session == null)
-                return;
-
-            session.Reset();
-            StateChanged?.Invoke();
         }
 
         private void HandleAction(TrainingAction action)

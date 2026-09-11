@@ -17,12 +17,8 @@ namespace VRTraining.Presentation
         private Material outlineMaterial;
         private bool isHighlighted;
 
-        public TrainingTarget Target { get; private set; }
-
         private void Awake()
         {
-            Target = GetComponent<TrainingTarget>();
-
             if (renderers == null || renderers.Length == 0)
                 renderers = GetComponentsInChildren<Renderer>(true);
 
